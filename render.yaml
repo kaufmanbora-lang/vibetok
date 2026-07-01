@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: vibetok
+    runtime: node
+    plan: starter
+    buildCommand: corepack enable && corepack prepare pnpm@11.7.0 --activate && pnpm install --frozen-lockfile && pnpm build:hosted
+    startCommand: pnpm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: VIBETOK_API_HOST
+        value: 0.0.0.0
+      - key: VIBETOK_STATIC_DIR
+        value: dist
+      - key: VIBETOK_DB_PATH
+        value: /var/data/vibetok-db.json
+    disk:
+      name: vibetok-data
+      mountPath: /var/data
+      sizeGB: 1
